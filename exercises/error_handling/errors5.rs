@@ -4,14 +4,33 @@
 // It won't compile right now! Why?
 // Execute `rustlings hint errors5` for hints!
 
-// I AM NOT DONE
+
 
 use std::error;
 use std::fmt;
 use std::num::ParseIntError;
 
+
 // TODO: update the return type of `main()` to make this compile.
-fn main() -> Result<(), ParseIntError> {
+
+#[derive(Debug)]
+enum CompoundError{
+    Parse(ParseIntError),
+    Creation(CreationError),
+}
+
+impl From<ParseIntError> for CompoundError{
+    fn from(src: ParseIntError) -> CompoundError {
+        CompoundError::Parse(src)
+    }
+}
+
+impl From<CreationError> for CompoundError{
+    fn from(src: CreationError) -> CompoundError {
+        CompoundError::Creation(src)
+    }
+}
+fn main() -> Result<(), CompoundError> {
     let pretend_user_input = "42";
     let x: i64 = pretend_user_input.parse()?;
     println!("output={:?}", PositiveNonzeroInteger::new(x)?);
